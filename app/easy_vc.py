@@ -1,6 +1,6 @@
 #coding: utf-8
 import pyaudio
-import struct
+import struct 
 import subprocess
 import pdb
 # SPTKを使った簡単なボイスチェンジャー
@@ -15,7 +15,7 @@ def record(raw_file, record_seconds=5):
     fp = open(raw_file, "wb")
     for _ in range(0, int(RATE / CHUNK * record_seconds)):
         data = stream.read(CHUNK)
-        fp.write(struct.pack('s' * CHUNK * 2, data))
+        fp.write(struct.pack('s' * CHUNK * 2, *data))
     fp.close()
     stream.stop_stream()
     stream.close()

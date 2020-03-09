@@ -4,8 +4,8 @@ import ddf.minim.effects.*;
 // parameters
 float DEPTH = 0.002;    // sec
 float FREQUENCY = 5.0;  // Hz
-
 float FS = 44100.0;
+
 PImage [] agent = new PImage[81];
 int speed = 1;
 int ms;

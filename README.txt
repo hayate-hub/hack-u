@@ -16,5 +16,9 @@ sptk
 
 --install　方法--
 
-brew install portaudio
-brew install homebrew/x11/sptk
+$ brew install portaudio
+
+$ cd library/SPTK-3.11
+$ ./configure
+$ make
+$ sudo make install
