@@ -18,7 +18,10 @@ sptk
 
 $ brew install portaudio
 
-$ cd library/SPTK-3.11
+
+$ cd _hack_u/library
+$ tar xvzf SPTK-3.11.tar.gz
+$ cd SPTK-3.11
 $ ./configure
 $ make
 $ sudo make install
