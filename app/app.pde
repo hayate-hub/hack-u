@@ -6,6 +6,7 @@ PImage [] agent = new PImage[81];
 int speed = 1;
 int ms;
 int reset_time = -30000;
+String input_file = "./dist/vc_out/output.wav";
 
 //クラス宣言
 
@@ -15,15 +16,19 @@ Minim minim;  //Minim型変数であるminimの宣言
 AudioPlayer player;  //サウンドデータ格納用の変数
 
 
+
  
 void setup()
 {
   size(600, 800);
   minim = new Minim(this);  //初期化
-  player = minim.loadFile("wav/output.wav"); //wavファイルを指定する 
+  player = minim.loadFile(input_file); //wavファイルを指定する 
   
   for(int i = 0;  i < agent.length; i++){
-  agent[i] = loadImage("motion2_export00"+ i +".png");
+    //agent[i] = loadImage("motion_draft/motion2_export00" + i + ".png");
+    String num = nf(i, 3);
+    println(num);
+    agent[i] = loadImage("Motion_Shinro_pngquant/nameless_export0"+ num +".png");
   }
 }
  
