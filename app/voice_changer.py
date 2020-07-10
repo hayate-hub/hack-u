@@ -127,3 +127,6 @@ def doing_all():
     child_voice(pitch_file, mcep_file, output_file)
 #    deep_voice(pitch_file, mcep_file, output_file)
     raw2wav(output_file, wav_file)
+
+doing_all()
+play(output_file)
