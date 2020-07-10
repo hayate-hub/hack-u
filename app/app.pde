@@ -2,11 +2,22 @@ import ddf.minim.*;
 import ddf.minim.effects.*;
 
 
-PImage [] agent = new PImage[81];
-int speed = 1;
-int ms;
-int reset_time = -30000;
+int pattern = 0; //初期設定
+//0：通常モード
+//1：音声読み取りモード
+//2：応援モード
+int pattern_log = 0;
+
+int frame_num = 61; //ピクチャー数+1に設定する
+int speed = 1; //フレームスピード
+
 String input_file = "./dist/vc_out/output.wav";
+
+
+
+
+PImage bg;
+PImage[] agent = new PImage[frame_num];
 
 //クラス宣言
 
@@ -18,29 +29,50 @@ AudioPlayer player;  //サウンドデータ格納用の変数
 
 
  
-void setup()
-{
-  size(600, 800);
+void setup(){
+  
+  size(1200, 900);
   minim = new Minim(this);  //初期化
   player = minim.loadFile(input_file); //wavファイルを指定する 
   
+  bg = loadImage("background/bg_baseball_ground.jpg");
+  
   for(int i = 0;  i < agent.length; i++){
     //agent[i] = loadImage("motion_draft/motion2_export00" + i + ".png");
+    
     String num = nf(i, 3);
-    println(num);
-    agent[i] = loadImage("Motion_Shinro_pngquant/nameless_export0"+ num +".png");
+    agent[i] = loadImage("shinro_motion/remotion_shinro0" + num + ".png");
+    
   }
 }
  
-void draw()
-{
-  background(255);
-  ms=millis();
+void draw(){
   
-  if(ms - reset_time<30000){
-    int frame =(frameCount/speed) % 81;
-    image(agent[frame],0,0);
+  image(bg, 0, 0, 1200, 900);
+  
+  
+  if(pattern_log == pattern){
+    String[] pattern_txt = {str(pattern)};
+    saveStrings("./pattern_out.txt", pattern_txt);
+    pattern_log = pattern;
   }
+  
+  move(pattern);
+  
+  
+}
+
+void move(int _pattern){
+  
+  if(_pattern == 0){
+    image(agent[0],300,50);
+  }
+  
+  if(_pattern == 1){
+    int frame =(frameCount/speed) % frame_num;
+    image(agent[frame],300,50);
+  }
+  
 }
 
 void stop()
@@ -50,13 +82,10 @@ void stop()
   super.stop();
 }
 
-void keyReleased(){
+void mouseReleased(){
   
-  if ( key == 'p' ){
-    
-    player.play();
-    println("Now playing...");
-    reset_time = ms;
-    
-  }
+  player.play();
+  println("Now playing...");
+  pattern = 1;
+  
 }
