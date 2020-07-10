@@ -118,6 +118,7 @@ def doing_all():
     # パラメータ変形いろいろ
     print("*** modify parameters ...")
 
+
     # どれか一つしか有効にできない
 #    modify_pitch(0.3, pitch_file, mcep_file, output_file)
 #    modify_speed(300, pitch_file, mcep_file, output_file)
@@ -125,6 +126,4 @@ def doing_all():
 #    robot_voice(100, record_seconds, mcep_file, output_file)
     child_voice(pitch_file, mcep_file, output_file)
 #    deep_voice(pitch_file, mcep_file, output_file)
-
-
-    raw2wav(raw_file, wav_file)
+    raw2wav(output_file, wav_file)

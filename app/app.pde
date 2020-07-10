@@ -2,11 +2,11 @@ import ddf.minim.*;
 import ddf.minim.effects.*;
 
 
-int pattern = 0; //初期設定
-//0：通常モード
-//1：音声読み取りモード
-//2：応援モード
-int pattern_log = 0;
+String pattern = "nomal"; //初期設定
+//nomal：通常モード
+//recode：音声読み取りモード
+//move：応援モード
+String pattern_log = "nomal";
 
 int frame_num = 61; //ピクチャー数+1に設定する
 int speed = 1; //フレームスピード
@@ -37,6 +37,10 @@ void setup(){
   
   bg = loadImage("background/bg_baseball_ground.jpg");
   
+  //pattern_out.txtの初期設定 0
+  String[] pattern_txt = {pattern};
+  saveStrings("./pattern_out.txt", pattern_txt);
+  
   for(int i = 0;  i < agent.length; i++){
     //agent[i] = loadImage("motion_draft/motion2_export00" + i + ".png");
     
@@ -51,8 +55,9 @@ void draw(){
   image(bg, 0, 0, 1200, 900);
   
   
-  if(pattern_log == pattern){
-    String[] pattern_txt = {str(pattern)};
+  if(pattern_log != pattern){
+    println("doing");
+    String[] pattern_txt = {pattern};
     saveStrings("./pattern_out.txt", pattern_txt);
     pattern_log = pattern;
   }
@@ -62,13 +67,19 @@ void draw(){
   
 }
 
-void move(int _pattern){
+void move(String _pattern){
   
-  if(_pattern == 0){
+  if(_pattern == "nomal"){
     image(agent[0],300,50);
   }
   
-  if(_pattern == 1){
+  if(_pattern == "recode"){
+    fill(0, 0, 100, 50);
+    rect(0, 0, 1200, 900);
+    image(agent[0],300,50);
+  }
+  
+  if(_pattern == "move"){
     int frame =(frameCount/speed) % frame_num;
     image(agent[frame],300,50);
   }
@@ -84,8 +95,19 @@ void stop()
 
 void mouseReleased(){
   
-  player.play();
-  println("Now playing...");
-  pattern = 1;
+  if(pattern == "nomal"){
+     pattern = "recode";
+  }else
+  if(pattern == "recode"){
+     player.play();
+     pattern = "move";
+  }else
+  if(pattern == "move"){
+     
+  }
+  
+}
+
+void keyReleased(){
   
 }
