@@ -2,9 +2,10 @@
 import voice_changer
 import os
 import subprocess
-import time
+import sched, time
 
 file = "pattern_out.txt"
+s = sched.scheduler(time.time, time.sleep)
 
 
 
@@ -26,23 +27,30 @@ def processing_exe():
 
 
 def pattern_loop():
-    while True:
-        f = open(file, "r", encoding="utf_8")
-        pattern = f.read()
-        print("processing...")
-        print("pattern:" + pattern)
-        print(pattern == "nomal")
-        if (pattern == "recode"):
-            break
+    f = open(file)
+    pattern = f.read()
+    pattern = pattern.replace('\n','')
+    print("pattern:" + pattern)
 
+    if (pattern == "recode"):
+        voice_changer.doing_all()
+
+
+def do_something(sc):
+    print "Doing stuff..."
+    pattern_loop()
+    s.enter(3, 1, do_something, (sc,))
 
 # voice_changer.doing_all()
 # voice_changer.play(output_file)
 
 def main():
 
-    pattern_loop()
-    voice_changer.doing_all()
+    s.enter(3, 1, do_something, (s,))
+    s.run()
+
+
+
 
 
 
