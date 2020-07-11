@@ -6,7 +6,7 @@ import sched, time
 
 file = "pattern_out.txt"
 s = sched.scheduler(time.time, time.sleep)
-
+p_bool = True
 
 
 #processing起動用コード
@@ -32,8 +32,15 @@ def pattern_loop():
     pattern = pattern.replace('\n','')
     print("pattern:" + pattern)
 
-    if (pattern == "recode"):
+    if (pattern == "nomal"):
+        global p_bool
+        p_bool = True
+    if (pattern == "recode") and (p_bool == True):
+        global p_bool
+        p_bool = False
         voice_changer.doing_all()
+
+
 
 
 def do_something(sc):
@@ -48,11 +55,6 @@ def main():
 
     s.enter(3, 1, do_something, (s,))
     s.run()
-
-
-
-
-
 
 
 if __name__ == '__main__':

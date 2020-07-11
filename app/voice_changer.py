@@ -6,12 +6,12 @@ import pdb
 # SPTKを使った簡単なボイスチェンジャー
 
 CHANNELS = 1
-RATE = 16000
-CHUNK = 1024
+RATE = 44100
+CHUNK = 1048*2
 
 
 # 録音時間（固定）
-record_seconds = 5
+record_seconds = 3
 
 p = pyaudio.PyAudio()
 stream = p.open(format=pyaudio.paInt16,
@@ -31,7 +31,7 @@ def record(raw_file, record_seconds=5):
     録音時間は固定。キーボードを押すとループ終わりができなかった・・・"""
     fp = open(raw_file, "wb")
     for _ in range(0, int(RATE / CHUNK * record_seconds)):
-        data = stream.read(CHUNK)
+        data = stream.read(CHUNK, exception_on_overflow = False)
         fp.write(struct.pack('s' * CHUNK * 2, *data))
     fp.close()
     stream.stop_stream()
@@ -45,7 +45,7 @@ def extract_pitch(raw_file, pitch_file):
 
 def extract_mcep(raw_file, mcep_file):
     """メルケプストラムパラメータの抽出"""
-    cmd = "x2x +sf %s | frame -p 80 | window | mcep -m 25 -a 0.42 > %s" % (raw_file, mcep_file)
+    cmd = "x2x +sf %s | frame -p 80 | window | mcep -e 0.3 -m 25 -a 0.42 > %s" % (raw_file, mcep_file)
     subprocess.call(cmd, shell=True)
 
 def modify_pitch(m, pitch_file, mcep_file, raw_file):
@@ -127,6 +127,4 @@ def doing_all():
     child_voice(pitch_file, mcep_file, output_file)
 #    deep_voice(pitch_file, mcep_file, output_file)
     raw2wav(output_file, wav_file)
-
-doing_all()
-play(output_file)
+    play(output_file)
