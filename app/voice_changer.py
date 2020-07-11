@@ -6,12 +6,12 @@ import pdb
 # SPTKを使った簡単なボイスチェンジャー
 
 CHANNELS = 1
-RATE = 44100
-CHUNK = 1048*2
+RATE = 16000
+CHUNK = 1048
 
 
 # 録音時間（固定）
-record_seconds = 3
+record_seconds = 5
 
 p = pyaudio.PyAudio()
 stream = p.open(format=pyaudio.paInt16,
@@ -45,7 +45,7 @@ def extract_pitch(raw_file, pitch_file):
 
 def extract_mcep(raw_file, mcep_file):
     """メルケプストラムパラメータの抽出"""
-    cmd = "x2x +sf %s | frame -p 80 | window | mcep -e 0.3 -m 25 -a 0.42 > %s" % (raw_file, mcep_file)
+    cmd = "x2x +sf %s | frame -p 80 | window | mcep -m 25 -e 1 -a 0.42 > %s" % (raw_file, mcep_file)
     subprocess.call(cmd, shell=True)
 
 def modify_pitch(m, pitch_file, mcep_file, raw_file):
@@ -127,4 +127,3 @@ def doing_all():
     child_voice(pitch_file, mcep_file, output_file)
 #    deep_voice(pitch_file, mcep_file, output_file)
     raw2wav(output_file, wav_file)
-    play(output_file)
