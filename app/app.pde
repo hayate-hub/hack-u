@@ -17,6 +17,9 @@ String shinro_down_path = "shinro_remotion_down/remotion_shinro_down";
 int frame_num = 121; //ピクチャー数+1に設定する
 int speed = 1; //フレームスピード
 
+int effect_alf = 11;
+boolean effect_alf_bool = true;
+
 String input_wav_path = "./dist/vc_out/output.wav";
 String up_preset_wav_path = "preset_voice/up_state.wav";
 String up_env_wav_path = "preset_voice/up_env.wav";
@@ -63,7 +66,7 @@ void setup(){
   String[] pattern_txt = {pattern};
   saveStrings("./pattern_out.txt", pattern_txt);
   
-  shinro_setup(shinro_nomal_path);
+  shinroSetup(shinro_nomal_path);
   println("Setup is finished");
 }
  
@@ -79,11 +82,28 @@ void draw(){
   }
   
   move(pattern);
+  recodeEffect();
   
   
 }
 
-void shinro_setup(String _path){
+void recodeEffect(){
+  
+  if(effect_alf > 90){
+    effect_alf_bool = false;
+  }else
+  if(effect_alf < 10){
+    effect_alf_bool = true;
+  }
+  if(effect_alf_bool){
+    effect_alf += 8;
+  }else{
+    effect_alf -= 8;
+  }
+
+}
+
+void shinroSetup(String _path){
   for(int i = 0;  i < agent.length; i++){
     //agent[i] = loadImage("motion_draft/motion2_export00" + i + ".png");
     
@@ -101,7 +121,7 @@ void move(String _pattern){
   }
   
   if(_pattern == "recode"){
-    fill(0, 0, 100, 50);
+    fill(0, 0, 100, effect_alf);
     rect(0, 0, 1200, 900);
     image(agent[0],300,50);
   }
@@ -129,6 +149,7 @@ void mouseReleased(){
     pattern = "recode";
   }else
   if(pattern == "recode"){
+    recoded_voice = minim.loadFile(input_wav_path);
     recoded_voice.play();
     pattern = "move";
   }else
@@ -147,12 +168,12 @@ void mouseReleased(){
 void keyReleased(){
   if(keyCode == ENTER){
     PImage[] agent = new PImage[frame_num]; //agentの状態を初期化
-    shinro_setup(shinro_nomal_path); //画像のセットアップ
+    shinroSetup(shinro_nomal_path); //画像のセットアップ
     pattern = "nomal"; //状態遷移
   }
   if(key == '1'){
     PImage[] agent = new PImage[frame_num];
-    shinro_setup(shinro_up_path);
+    shinroSetup(shinro_up_path);
     pattern = "up";
     up_env.play();
     up_preset.play();
@@ -161,7 +182,7 @@ void keyReleased(){
   }
   if(key == '2'){
     PImage[] agent = new PImage[frame_num];
-    shinro_setup(shinro_down_path);
+    shinroSetup(shinro_down_path);
     pattern = "down";
     down_env.play();
     down_preset.play();
