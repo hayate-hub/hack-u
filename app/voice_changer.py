@@ -11,7 +11,7 @@ CHUNK = 1048
 
 
 # 録音時間（固定）
-record_seconds = 5
+record_seconds = 3
 
 p = pyaudio.PyAudio()
 stream = p.open(format=pyaudio.paInt16,
@@ -127,3 +127,7 @@ def doing_all():
     child_voice(pitch_file, mcep_file, output_file)
 #    deep_voice(pitch_file, mcep_file, output_file)
     raw2wav(output_file, wav_file)
+    play(output_file)
+
+
+doing_all()
